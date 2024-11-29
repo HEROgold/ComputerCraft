@@ -34,6 +34,7 @@ function turn_right()
     end
 end
 
+---@returns table<integer, integer, integer>
 local function get_coords()
     ---@type table<integer, integer, integer>
     local gps = gps.locate()

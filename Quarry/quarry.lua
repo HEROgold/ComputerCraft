@@ -28,6 +28,7 @@ end
 starting_point.y = tonumber(starting_height)
 
 
+---@returns table<integer, integer, integer>
 local function get_coords()
     ---@type table<integer, integer, integer>
     local gps = gps.locate()
