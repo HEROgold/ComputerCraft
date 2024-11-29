@@ -11,8 +11,8 @@ local chest_slots = 36
 local chest_inventory = {}
 local starting_height = arg[1] or nil
 
-local CHESTS = "forge:chests"
-local ORES = "forge:ores"
+local CHESTS = "c:chests"
+local ORES = "c:ores"
 local FRONT = 0
 local RIGHT = 1
 local BACK = 2
@@ -22,7 +22,7 @@ local LEFT = 3
 if starting_height == nil then
     print(prefix.."No starting height provided")
     print(prefix.."Starting Y coordinate?")
-    local starting_height = read("Starting height: ")
+    starting_height = read("Starting height: ")
 end
 
 starting_point.y = tonumber(starting_height)
