@@ -1,0 +1,10 @@
+{
+    "Lua.diagnostics.globals": [
+        "turtle",
+        "term",
+        "read",
+        "exit",
+        "gps",
+        "peripheral"
+    ]
+}
