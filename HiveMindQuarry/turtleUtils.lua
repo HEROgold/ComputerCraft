@@ -63,7 +63,8 @@ TurtleUtils.moveTo = function(targetX, targetY, targetZ)
             west = { north = "right", east = "right", south = "left", west = "none" }
         }
 
-        local turn = turns[direction][targetDirection]
+        local direction = turns[direction]
+        local turn = direction[targetDirection]
         if turn == "right" then
             turtle.turnRight()
         elseif turn == "left" then
