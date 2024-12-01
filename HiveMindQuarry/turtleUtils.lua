@@ -91,9 +91,25 @@ TurtleUtils.moveTo = function(targetX, targetY, targetZ)
         end
     end
 
+    local function moveToVerticalAxis(current, target)
+        while current ~= target do
+            if current < target then
+                while not turtle.up() do
+                    turtle.digUp()
+                end
+                current = current + 1
+            else
+                while not turtle.down() do
+                    turtle.digDown()
+                end
+                current = current - 1
+            end
+        end
+    end
+
     moveToAxis(x, targetX, "east", "west")
     moveToAxis(z, targetZ, "south", "north")
-    moveToAxis(y, targetY, "up", "down")
+    moveToVerticalAxis(y, targetY)
 
     return true
 end
@@ -134,6 +150,12 @@ TurtleUtils.mineSubChunk = function(subChunk, fuelSlot, masterX, masterY, master
 
     -- Start at the initial position
     local x, y, z = startX, startY, startZ
+
+    -- Move to the correct starting Y position
+    if y > masterY - 1 then
+        TurtleUtils.moveTo(x, masterY - 1, z)
+        y = masterY - 1
+    end
 
     for x = startX, endX do
         for z = startZ, endZ do
