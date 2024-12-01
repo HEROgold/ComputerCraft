@@ -5,6 +5,11 @@
         "read",
         "exit",
         "gps",
-        "peripheral"
+        "peripheral",
+        "rednet",
+        "sleep",
+    ],
+    "cSpell.words": [
+        "rednet"
     ]
 }
