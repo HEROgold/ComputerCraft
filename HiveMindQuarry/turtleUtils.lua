@@ -135,54 +135,39 @@ TurtleUtils.mineSubChunk = function(subChunk, fuelSlot, masterX, masterY, master
     -- Start at the initial position
     local x, y, z = startX, startY, startZ
 
-    for y = startY, endY, -1 do
-        for x = startX, endX do
-            for z = startZ, endZ do
+    for x = startX, endX do
+        for z = startZ, endZ do
+            for y = startY, endY, -1 do
                 -- Check and mine the current block
                 TurtleUtils.checkAndMineBlock()
 
                 -- Check inventory slots and refuel if necessary
                 TurtleUtils.checkInventoryAndRefuel(fuelSlot, masterX, masterY, masterZ)
 
-                -- Move forward
-                if z < endZ then
-                    while not turtle.forward() do
-                        turtle.dig()
+                -- Move down
+                if y > endY then
+                    while not turtle.down() do
+                        turtle.digDown()
                     end
                 end
             end
-
-            -- Move to the next row
-            if x < endX then
-                if (x - startX) % 2 == 0 then
-                    turtle.turnRight()
-                    while not turtle.forward() do
-                        turtle.dig()
-                    end
-                    turtle.turnRight()
-                else
-                    turtle.turnLeft()
-                    while not turtle.forward() do
-                        turtle.dig()
-                    end
-                    turtle.turnLeft()
+            -- Move to the next column
+            if z < endZ then
+                turtle.turnRight()
+                while not turtle.forward() do
+                    turtle.dig()
                 end
+                turtle.turnLeft()
             end
         end
-        -- Check for bedrock and stop mining if found
-        local success, data = turtle.inspectDown()
-        if success and data.name == "minecraft:bedrock" then
-            print("Bedrock detected, stopping mining.")
-            goto continue
-        end
-
-        -- Move to the next layer
-        if y > endY then
-            while not turtle.down() do
-                turtle.digDown()
+        -- Move to the next row
+        if x < endX then
+            turtle.turnLeft()
+            while not turtle.forward() do
+                turtle.dig()
             end
+            turtle.turnRight()
         end
-        ::continue::
     end
 end
 
