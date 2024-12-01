@@ -57,10 +57,10 @@ TurtleUtils.moveTo = function(targetX, targetY, targetZ)
         end
 
         local turns = {
-            north = {east = "right", west = "left", south = "right", north = "none"},
-            east = {north = "left", west = "right", south = "right", east = "none"},
-            south = {north = "right", east = "left", west = "right", south = "none"},
-            west = {north = "right", east = "right", south = "left", west = "none"}
+            north = { east = "right", west = "left", south = "right", north = "none" },
+            east = { north = "left", west = "right", south = "right", east = "none" },
+            south = { north = "right", east = "left", west = "right", south = "none" },
+            west = { north = "right", east = "right", south = "left", west = "none" }
         }
 
         local turn = turns[direction][targetDirection]
@@ -98,6 +98,32 @@ TurtleUtils.moveTo = function(targetX, targetY, targetZ)
     return true
 end
 
+TurtleUtils.checkAndMineBlock = function()
+    local success, data = turtle.inspect()
+    if not (success and data.name == "computercraft:turtle") then
+        turtle.dig()
+    end
+
+    success, data = turtle.inspectUp()
+    if not (success and data.name == "computercraft:turtle") then
+        turtle.digUp()
+    end
+
+    success, data = turtle.inspectDown()
+    if not (success and data.name == "computercraft:turtle") then
+        turtle.digDown()
+    end
+end
+
+TurtleUtils.checkInventoryAndRefuel = function(fuelSlot, masterX, masterY, masterZ)
+    if TurtleUtils.emptySlots() <= 1 then
+        print("Inventory full, returning to dump items and refuel.")
+        local currentX, currentY, currentZ = gps.locate(5, true)
+        TurtleUtils.returnToBaseAndRefuel(fuelSlot, masterX, masterY, masterZ)
+        TurtleUtils.moveTo(currentX, currentY, currentZ)
+    end
+end
+
 TurtleUtils.mineSubChunk = function(subChunk, fuelSlot, masterX, masterY, masterZ)
     local startX = subChunk.startX
     local endX = subChunk.endX
@@ -112,18 +138,11 @@ TurtleUtils.mineSubChunk = function(subChunk, fuelSlot, masterX, masterY, master
     for y = startY, endY, -1 do
         for x = startX, endX do
             for z = startZ, endZ do
-                -- Mine the current block
-                turtle.dig()
-                turtle.digUp()
-                turtle.digDown()
+                -- Check and mine the current block
+                TurtleUtils.checkAndMineBlock()
 
-                -- Check inventory slots
-                if TurtleUtils.emptySlots() <= 1 then
-                    print("Inventory full, returning to dump items and refuel.")
-                    local currentX, currentY, currentZ = gps.locate(5, true)
-                    TurtleUtils.returnToBaseAndRefuel(fuelSlot, masterX, masterY, masterZ)
-                    TurtleUtils.moveTo(currentX, currentY, currentZ)
-                end
+                -- Check inventory slots and refuel if necessary
+                TurtleUtils.checkInventoryAndRefuel(fuelSlot, masterX, masterY, masterZ)
 
                 -- Move forward
                 if z < endZ then
@@ -150,6 +169,12 @@ TurtleUtils.mineSubChunk = function(subChunk, fuelSlot, masterX, masterY, master
                 end
             end
         end
+        -- Check for bedrock and stop mining if found
+        local success, data = turtle.inspectDown()
+        if success and data.name == "minecraft:bedrock" then
+            print("Bedrock detected, stopping mining.")
+            goto continue
+        end
 
         -- Move to the next layer
         if y > endY then
@@ -157,6 +182,7 @@ TurtleUtils.mineSubChunk = function(subChunk, fuelSlot, masterX, masterY, master
                 turtle.digDown()
             end
         end
+        ::continue::
     end
 end
 
