@@ -11,8 +11,8 @@ local chest_slots = 36
 local chest_inventory = {}
 local starting_height = arg[1] or nil
 
-local CHESTS = "c:chests"
-local ORES = "c:ores"
+local CHESTS = "forge:chests"
+local ORES = "forge:ores"
 local FRONT = 0
 local RIGHT = 1
 local BACK = 2
