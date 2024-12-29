@@ -338,7 +338,7 @@ get_chest_slots()
 find_fuel_slot()
 
 mine_to_bedrock()
-mine_quarry(8)
+mine_quarry(8) -- TODO: use size arg
 to_surface()
 goto_rotation(FRONT)
 while turtle.forward() do
