@@ -5,12 +5,10 @@ TurtleUtils.findBedrock = function()
     local depth = 0
     while true do
         if turtle.detectDown() then
-            if turtle.inspectDown() then
-                local success, data = turtle.inspectDown()
-                if success then
-                    for k, v in pairs(data) do
-                        print(k, v)
-                    end
+            local success, data = turtle.inspectDown()
+            if success then
+                for k, v in pairs(data) do
+                    print(k, v)
                 end
                 if data.name == "minecraft:bedrock" then
                     print("Bedrock found at depth: " .. depth)
