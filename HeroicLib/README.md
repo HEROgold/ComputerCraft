@@ -6,7 +6,7 @@ A collection of utility modules for ComputerCraft turtles.
 
 - **Display Module**: Progress bars and turtle status information with rednet capability detection
 - **Fuel Module**: Fuel management and monitoring
-- **Movement Module**: Advanced movement controls for turtles
+- **Turtle Module**: Advanced Turtle controls for turtles, extends turtle api.
 - **Storage Module**: Inventory management utilities
 - **Startup Script**: Loading screen with progress bar and system information
 - **Auto-Update System**: Checks for updates during startup and prompts for installation
@@ -44,7 +44,7 @@ Import the modules you need:
 ```lua
 local display = require("HeroicLib/display")
 local fuel = require("HeroicLib/fuel")
-local movement = require("HeroicLib/movement")
+local Turtle = require("HeroicLib/Turtle")
 local storage = require("HeroicLib/storage")
 ```
 
@@ -105,7 +105,7 @@ local level = fuel.getFuelLevel()
 local fuelInfo = fuel.getFuelString()
 ```
 
-### Movement Module
+### Turtle Module
 
 ```lua
 -- Move in specific directions

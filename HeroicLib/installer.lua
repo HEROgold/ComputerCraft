@@ -13,7 +13,7 @@ local VERSION_FILE = "HeroicLib/version.lua"
 local files = {
     "display.lua",
     "fuel.lua",
-    "movement.lua",
+    "turtle.lua",
     "storage.lua",
     "startup.lua",
     "version.lua" -- Add version file to the list
@@ -99,11 +99,6 @@ if success then
     print("==================================")
     print("HeroicLib installed successfully!")
     print("Version: " .. VERSION)
-    print("To use it in your code, add: ")
-    print('local display = require("HeroicLib/display")')
-    print('local fuel = require("HeroicLib/fuel")')
-    print('local movement = require("HeroicLib/movement")')
-    print('local storage = require("HeroicLib/storage")')
     print("==================================")
     if skipStartupModification then
         print("To run the startup loader, add this to your startup.lua:")
