@@ -4,14 +4,6 @@
 
 local args = {...}
 local branch = args[1] or "main"
-local token = args[2] or ""  -- GitHub token (required for private repositories.)
-
--- Add token to URL if provided
-local tokenParam = ""
-if token and token ~= "" then
-    tokenParam = "?token=" .. token
-end
-
 local basePath = "https://raw.githubusercontent.com/HEROgold/ComputerCraft/" .. branch .. "/HeroicLib/"
 
 -- Current version information
@@ -40,7 +32,7 @@ print("==================================")
 local success = true
 for _, file in ipairs(files) do
     print("Downloading " .. file .. "...")
-    local response = http.get(basePath .. file .. tokenParam)
+    local response = http.get(basePath .. file)
     
     if response then
         local content = response.readAll()
@@ -81,6 +73,4 @@ else
     print("==================================")
     print("Some files failed to download.")
     print("Please check your internet connection and try again.")
-    print("If you're using a private repository, make sure to provide a valid token.")
-    print("Usage: wget run https://raw.githubusercontent.com/HEROgold/ComputerCraft/main/HeroicLib/installer.lua [branch] [token]")
 end
