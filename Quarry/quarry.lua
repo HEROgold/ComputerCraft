@@ -9,7 +9,7 @@ local fuel_count = 0
 local fuel_slot = 0
 local chest_slots = 36
 local chest_inventory = {}
-local starting_height = arg[1] or nil
+local size = arg[1] or nil
 
 local CHESTS = "forge:chests"
 local ORES = "forge:ores"
@@ -19,13 +19,13 @@ local BACK = 2
 local LEFT = 3
 
 
-if starting_height == nil then
-    print(prefix.."No starting height provided")
-    print(prefix.."Starting Y coordinate?")
-    starting_height = read("Starting height: ")
+if size == nil then
+    print(prefix.."No starting size provided")
+    print(prefix.."Size?")
+    size = read("Size: ")
 end
 
-starting_point.y = tonumber(starting_height)
+starting_point.y = tonumber(size)
 
 
 ---@returns table<integer, integer, integer>
@@ -147,40 +147,6 @@ local function refuel(target)
     return true
 end
 
-local function inspect_surroundings()
-    local _, front = turtle.inspect()
-    local _, up = turtle.inspectUp()
-    local _, down = turtle.inspectDown()
-    turn_left()
-    local _, left = turtle.inspect()
-    turn_left()
-    local _, back = turtle.inspect()
-    turn_left()
-    local _, right = turtle.inspect()
-    turn_left()
-    return {
-        front = front,
-        up = up,
-        down = down,
-        left = left,
-        back = back,
-        right = right
-    }
-end
-
-
-local function should_mine(block)
-    if block == nil then
-        return false
-    end
-    if block.tags == nil then
-        return false
-    end
-    if block.tags[ORES] then
-        return true
-    end
-    return false
-end
 
 local function to_surface()
     while offset.y < 0 do
@@ -215,48 +181,6 @@ local function dump_inventory()
     end
 end
 
-local function mine_surroundings()
-    local surroundings = inspect_surroundings()
-    if should_mine(surroundings.front) then
-        goto_rotation(FRONT)
-        turtle.dig()
-    end
-    if should_mine(surroundings.right) then
-        goto_rotation(RIGHT)
-        turtle.dig()
-    end
-    if should_mine(surroundings.back) then
-        goto_rotation(BACK)
-        turtle.dig()
-    end
-    if should_mine(surroundings.left) then
-        goto_rotation(LEFT)
-        turtle.dig()
-    end
-    if should_mine(surroundings.up) then
-        turtle.digUp()
-    end
-    if should_mine(surroundings.down) then
-        turtle.digDown()
-    end
-    goto_rotation(FRONT)
-end
-
-local function mine_to_bedrock()
-    while has_free_slot() do
-        if refuel(300) == false then
-            break
-        end
-        if get_coords().y <= bedrock_y then
-            print(prefix.."Reached bedrock")
-            break
-        end
-        turtle.digDown()
-        move_down()
-    end
-end
-
-
 ---comment
 ---@param length integer
 ---@return integer
@@ -272,8 +196,9 @@ local function mine_tunnel(length)
     for i = 1, length do
         goto_rotation(BACK)
         turtle.dig()
+        turtle.digDown()
+        turtle.digUp()
         turtle.forward()
-        mine_surroundings()
         reached = i
         if not has_free_slot() then
             print(prefix.."Inventory full, returning...")
@@ -337,11 +262,19 @@ get_chest_front()
 get_chest_slots()
 find_fuel_slot()
 
-mine_to_bedrock()
-mine_quarry(8) -- TODO: use size arg
+turtle.digDown()
+turtle.down()
+turtle.digDown()
+turtle.down()
+
+mine_quarry(size)
 to_surface()
-goto_rotation(FRONT)
-while turtle.forward() do
+goto_rotation(BACK)
+
+-- TODO: Make proper return path finder.
+for i=1, size do
+    turtle.dig()
+    turtle.forward()
 end
 dump_inventory()
 

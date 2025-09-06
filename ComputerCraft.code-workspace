@@ -2,7 +2,7 @@
 	"folders": [
 		{
 			"path": "."
-		}
+		},
 	],
 	"settings": {
 		"Lua.diagnostics.globals": [
