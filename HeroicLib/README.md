@@ -10,6 +10,7 @@ A collection of utility modules for ComputerCraft turtles.
 - **Storage Module**: Inventory management utilities
 - **Startup Script**: Loading screen with progress bar and system information
 - **Auto-Update System**: Checks for updates during startup and prompts for installation
+- **Automatic Startup Integration**: Modifies or creates startup.lua to include HeroicLib
 
 ## Installation
 
@@ -19,6 +20,19 @@ Run this command in your ComputerCraft computer or turtle:
 
 ```lua
 wget run https://raw.githubusercontent.com/HEROgold/ComputerCraft/main/HeroicLib/installer.lua
+```
+
+The installer will automatically:
+
+1. Download all HeroicLib files
+2. Check for an existing startup.lua file
+3. Either modify the existing startup.lua or create a new one
+4. Configure your computer to show the HeroicLib loading screen on startup
+
+If you don't want the installer to modify your startup.lua, add "skipStartup" as the third parameter:
+
+```lua
+wget run https://raw.githubusercontent.com/HEROgold/ComputerCraft/main/HeroicLib/installer.lua main "" skipStartup
 ```
 
 ## Usage
