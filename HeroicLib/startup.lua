@@ -3,7 +3,7 @@
 
 local display = require("HeroicLib/display")
 local versionInfo = require("HeroicLib/version")
-local time = 5
+local time = 1
 local time_ms = time * 1000
 
 -- Function to check for updates

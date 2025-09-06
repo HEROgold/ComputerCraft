@@ -1,7 +1,7 @@
 -- HeroicLib/display.lua
 -- Display module for turtle information and progress bars
 
-local movement = require("HeroicLib/movement")
+local turtle = require("HeroicLib/turtle")
 local fuelManager = require("HeroicLib/fuel")
 
 local display = {}
