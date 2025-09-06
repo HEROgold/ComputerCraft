@@ -4,5 +4,21 @@
 			"path": "."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"Lua.diagnostics.globals": [
+			"turtle",
+			"term",
+			"read",
+			"exit",
+			"gps",
+			"peripheral",
+			"rednet",
+			"sleep",
+			"fs",
+			"textutils"
+		],
+		"cSpell.words": [
+			"rednet"
+		]
+	}
 }
