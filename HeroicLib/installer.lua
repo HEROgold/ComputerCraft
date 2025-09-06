@@ -107,9 +107,24 @@ if success then
     else
         print("The startup.lua file has been modified to load HeroicLib on startup.")
         print("Your computer will now show the HeroicLib loading screen when it starts.")
+    else
+        print("==================================")
+        print("Installation encountered errors:")
+        
+        -- Track and display failed files
+        local failedFiles = {}
+        for _, file in ipairs(files) do
+            if not fs.exists("HeroicLib/" .. file) then
+                table.insert(failedFiles, file)
+            end
+        end
+        
+        -- Print failed files in red
+        term.setTextColor(colors.red)
+        for _, file in ipairs(failedFiles) do
+            print(" - Failed: " .. file)
+        end
+        term.setTextColor(colors.white)
+        
+        print("Please check your internet connection and try again.")
     end
-else
-    print("==================================")
-    print("Some files failed to download.")
-    print("Please check your internet connection and try again.")
-end
