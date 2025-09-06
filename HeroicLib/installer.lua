@@ -57,6 +57,44 @@ if not fs.exists(VERSION_FILE) then
     print("Created version file")
 end
 
+-- Check and modify startup.lua file if not skipped
+if not skipStartupModification then
+    print("Checking for existing startup.lua file...")
+    
+    local startupContent = ""
+    local requireLine = 'local heroicStartup = require("HeroicLib/startup")\nheroicStartup()'
+    
+    if fs.exists("startup.lua") then
+        print(" - Found existing startup.lua")
+        local handle = fs.open("startup.lua", "r")
+        startupContent = handle.readAll()
+        handle.close()
+        
+        -- Check if the file already has the require line
+        if not string.find(startupContent, 'require%("HeroicLib/startup"%)', 1, false) and 
+           not string.find(startupContent, "require%(\"HeroicLib/startup\"%)", 1, false) and
+           not string.find(startupContent, 'require%("HeroicLib/startup"%)', 1, false) and
+           not string.find(startupContent, "require'HeroicLib/startup'", 1, false) then
+            
+            print(" - Adding HeroicLib startup to existing startup.lua")
+            startupContent = requireLine .. "\n\n" .. startupContent
+            
+            local handle = fs.open("startup.lua", "w")
+            handle.write(startupContent)
+            handle.close()
+            print(" - Successfully updated startup.lua")
+        else
+            print(" - HeroicLib startup already in startup.lua")
+        end
+    else
+        print(" - No startup.lua found, creating one")
+        local handle = fs.open("startup.lua", "w")
+        handle.write(requireLine .. "\n\n-- Your code can go here\n")
+        handle.close()
+        print(" - Created startup.lua with HeroicLib")
+    end
+end
+
 if success then
     print("==================================")
     print("HeroicLib installed successfully!")
@@ -67,8 +105,14 @@ if success then
     print('local movement = require("HeroicLib/movement")')
     print('local storage = require("HeroicLib/storage")')
     print("==================================")
-    print("To run the startup loader, add this to your startup.lua:")
-    print('shell.run("HeroicLib/startup.lua")')
+    if skipStartupModification then
+        print("To run the startup loader, add this to your startup.lua:")
+        print('local heroicStartup = require("HeroicLib/startup")')
+        print('heroicStartup()')
+    else
+        print("The startup.lua file has been modified to load HeroicLib on startup.")
+        print("Your computer will now show the HeroicLib loading screen when it starts.")
+    end
 else
     print("==================================")
     print("Some files failed to download.")
